@@ -10,9 +10,9 @@ oxy_space = [
     oxy.HttpLLM(
         name="default_llm",
         timeout=600,
-        api_key='sk-kylinoio',#'sk-11cd8a337d614ce89945a795c8c8d782',#'sk-c2db90daeab74b26a7b6ee8b422e2c84',#os.getenv("DEFAULT_LLM_API_KEY"),
-        base_url='https://dqbnczptnsvr.ap-northeast-1.clawcloudrun.com/gemini/v1beta/',#'https://chat.ecnu.edu.cn/open/api/v1',#'https://api.deepseek.com',#os.getenv("DEFAULT_LLM_BASE_URL"),
-        model_name='gemini-2.5-pro',#'ecnu-reasoner'#'deepseek-reasoner'#os.getenv("DEFAULT_LLM_MODEL_NAME"),
+        api_key='sk-kylinoio',
+        base_url='https://dqbnczptnsvr.ap-northeast-1.clawcloudrun.com/gemini/v1beta/',
+        model_name='gemini-2.5-pro',
         
     ),
     preset_tools.time_tools,
@@ -30,7 +30,7 @@ oxy_space = [
     ),
     oxy.ReActAgent(
         name="file_agent",
-        desc="一个可以分析文件内容的代理，每次向他询问要指定文件路径",
+        desc="一个可以分析文件内容、查询本地有什么文件的代理，每次向他询问要指定文件路径或要访问的资源，如预置资源，网络下载资源，用户上传资源等。",
         tools=["file_reader"],
     ),
     preset_tools.math_tools,
