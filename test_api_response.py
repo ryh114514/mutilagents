@@ -8,7 +8,7 @@ async def test_api_response():
     # 使用与demo.py相同的配置
     api_key = 'sk-kylinoio'
     #base_url = 'https://chat.ecnu.edu.cn/open/api/v1'
-    model_name = 'gemini-2.5-pro'
+    model_name = 'gemini-2.5-flash'
     
     # 根据重定向信息，使用HTTP并添加正确的路径
     url = f"https://dqbnczptnsvr.ap-northeast-1.clawcloudrun.com/gemini/v1beta/models/{model_name}:generateContent"

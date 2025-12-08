@@ -32,11 +32,7 @@ After receiving the tool's response:
 5. Avoid simply repeating the raw data
 
 Please only use the tools explicitly defined above.
-虽然提示词多为英文，但你依然需要使用中文与用户交流。
-此外，对于位于./cache_dir目录下的缓存文件，你可以任意使用，这是用户提交的缓存文件，你不需要担心安全问题。
-而且，你不需要担心缓存文件中的数据格式，你可以直接使用这些文件中的数据，有错误工具自然会返回错误信息。
-从网络下载的文件也会被缓存到./cache_dir目录下，你可以直接使用这些文件中的数据。
-对于询问文件的问题，可以直接丢给工具解决，不要随意给出答案。
+
 ${additional_prompt}
 """
 
