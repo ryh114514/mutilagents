@@ -29,14 +29,17 @@ oxy_space = [
         },
     ),
     #preset_tools.command_tool,
-    #    oxy.StdioMCPClient(
+    #oxy.StdioMCPClient(
     #    name="command_handler" ,
     #    params={
-    #        "command": "uv",
-    #        "args": ["--directory", "./mcp_servers", "run", "command_handler.py"],
+    #        "command": "python",
+    #        "args": ["-u", "./mcp_servers/command_handler.py"],
     #    }
     #),
-    
+    oxy.SSEMCPClient(
+    name="command_handler",
+    sse_url="http://127.0.0.1:8000/sse"
+    ),
     oxy.ReActAgent(
         name="file_agent",
         prompt=提示词.prompt_of_file_agent,
@@ -47,7 +50,7 @@ oxy_space = [
         name="command_agent",
         prompt=提示词.prompt_of_command_agent,
         desc="一个用于执行命令、按要求编写代码并执行代码的代理",
-        tools=["command_tool"],
+        tools=["command_handler"],
     ),
     oxy.ReActAgent(
         is_master=True,

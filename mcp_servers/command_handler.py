@@ -4,7 +4,7 @@ import time
 from mcp.server.fastmcp import FastMCP
 import queue
 import threading
-mcp = FastMCP()
+mcp = FastMCP("command_handler",port=8000)
 @mcp.tool(description="""
     在指定路径下执行命令
     command (str): 要执行的命令
@@ -15,7 +15,7 @@ mcp = FastMCP()
           只允许utf-8编码
     """)
 
-def _run(command: str, path: str = 'generate', timeout: int = 15) -> str:
+def run(command: str, path: str = 'generate', timeout: int = 15) -> str:
     """
     安全的命令执行，特别处理 Python 命令
     
@@ -310,4 +310,17 @@ def code_writer(file_name: str, content: str, change: bool = False) -> str:
 
 if __name__ == "__main__":
     #print( os.path.abspath(__file__))
-    mcp.run()
+    # 配置服务器参数
+    host = "127.0.0.1"  # 绑定到本地回环地址，更安全
+    port = 8000          # 你希望服务器监听的端口号
+    
+    print(f"⏳ 正在启动 MCP 服务器...")
+    print(f"   📍 访问地址: http://{host}:{port}")
+    print(f"   🔌 SSE 端点: http://{host}:{port}/sse")
+    print(f"   📡 传输模式: HTTP/SSE")
+    print("按下 Ctrl+C 停止服务器")
+    
+    # 关键：以 SSE 传输模式启动服务器，这将使其在指定端口上持续运行
+    mcp.run(
+        transport="sse",  # 使用 Server-Sent Events 传输
+            )

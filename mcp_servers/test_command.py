@@ -305,5 +305,5 @@ def run_safe(command: str, path: str = 'generate', timeout: int = 15) -> str:
 
 
 if __name__ == '__main__':
-    command="python pythagorean_triples.py"
+    command="python triples_calculator.py"
     print(run_safe(command,'generate'))
