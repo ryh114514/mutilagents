@@ -12,8 +12,7 @@ oxy_space = [
         timeout=600,
         api_key='sk-kylinoio',
         base_url='https://dqbnczptnsvr.ap-northeast-1.clawcloudrun.com/gemini/v1beta/',
-        model_name='gemini-2.5-flash',
-        
+        model_name='gemini-2.5-flash-lite',
     ),
     preset_tools.time_tools,
     oxy.ReActAgent(
@@ -37,8 +36,15 @@ oxy_space = [
     #    }
     #),
     oxy.SSEMCPClient(
-    name="command_handler",
-    sse_url="http://127.0.0.1:8000/sse"
+        name="command_handler",
+        sse_url="http://127.0.0.1:8000/sse",
+    ),
+    oxy.StdioMCPClient(
+        name="search_client",
+        params={
+            "command": "python",  # 使用当前环境的 python
+            "args": ["-u", "./mcp_servers/search_server.py"],  # -u 表示不缓存输出
+        },
     ),
     oxy.ReActAgent(
         name="file_agent",
@@ -53,11 +59,32 @@ oxy_space = [
         tools=["command_handler"],
     ),
     oxy.ReActAgent(
+        name="search_agent",
+        prompt="""
+                你是一个不知疲倦的搜索执行器。
+                你的唯一任务是调用 'web_search' 工具来回答用户的请求。
+                【重要规则】
+                1. 收到请求后，必须立刻生成调用 'web_search' 的 JSON 指令。
+                2. 严禁回复“好的”、“正在搜索”等自然语言废话。
+                3. 如果没有搜索结果，尝试更换关键词再次搜索。
+                
+                你必须且只能输出严格符合以下 JSON 结构的文本：
+                {
+                    "tool_name": "web_search",
+                    "arguments": {
+                        "query": "这里填写关键词"
+                    }
+                }
+                """,
+        desc="一个可以搜索互联网的代理。当用户询问实时新闻、技术文档或任何外部知识时，请调用此代理。",
+        tools=["web_search"],
+    ),
+    oxy.ReActAgent(
         is_master=True,
         name="master_agent",
         prompt=提示词.prompt_of_master,
         #prompt="你将熟练的使用下属代理完成用户的请求。你有三个下属代理：时间代理（time_agent），文件代理（file_agent），数学代理（math_agent）。时间代理可以查询当前时间，文件代理可以读写文件，数学代理可以进行数学计算。根据用户的请求，合理分配任务然后调用下属代理，并整合他们的回答，最终给出完整的回复。",
-        sub_agents=["time_agent", "file_agent", "command_agent"],
+        sub_agents=["time_agent", "file_agent", "command_agent", "search_agent"],
         #tools=["time_tools", "file_tools", "math_tools"],
     ),
 ]
