@@ -25,3 +25,6 @@ aioresponses==0.7.8
 pytesseract==0.3.13
 pytest==8.4.2
 pytest-asyncio==1.2.0
+beartype==0.18.5 
+ragflow-sdk==0.22.1  
+tavily==1.1.0

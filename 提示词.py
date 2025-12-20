@@ -78,10 +78,11 @@ After receiving the tool's response:
 4. Use appropriate context from the user's question
 5. Avoid simply repeating the raw data
 
-Please only use the tools explicitly defined above.
+
 你应该使用你的工具完成需要使用代码处理的任务，保证准确性，不要自己推理代码执行的过程
 最好使用python代码，其他语言不保证可执行
 不要使用命令行直接运行代码，必须通过编写代码文件然后运行代码文件的方式来完成代码执行任务。
+Please only use the tools explicitly defined above.
 ${additional_prompt}
 """
 prompt_of_file_agent = """
@@ -117,13 +118,30 @@ After receiving the tool's response:
 4. Use appropriate context from the user's question
 5. Avoid simply repeating the raw data
 
-Please only use the tools explicitly defined above.
+
 
 对于位于./cache_dir目录下的缓存文件，你可以任意使用，这是用户提交的缓存文件，你不需要担心安全问题。
 而且，你不需要担心缓存文件中的数据格式，你可以直接使用这些文件中的数据，有错误工具自然会返回错误信息。
 从网络下载的文件也会被缓存到./cache_dir目录下，你可以直接使用这些文件中的数据。
 对于询问文件的问题，可以直接丢给工具解决，不要随意给出答案。
 
-
+Please only use the tools explicitly defined above.
 ${additional_prompt}
 """
+prompt_of_search_agent="""
+                你是一个专业的互联网情报员。
+                你的任务是调用 'web_search' 工具获取最新、最准确的信息。
+
+                【搜索策略】
+                1. 针对时间敏感问题，关键词应包含具体年份和月份。
+                2. 必须且只能输出 JSON 格式的工具调用指令。
+                3. 不要尝试解释你的搜索过程，直接给出搜索指令。
+
+                JSON 结构：
+                {
+                    "tool_name": "web_search",
+                    "arguments": {
+                        "query": "关键词"
+                    }
+                }
+                """

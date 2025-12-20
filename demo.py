@@ -2,7 +2,6 @@ import asyncio
 import os
 import 提示词
 from oxygent import MAS, Config, oxy, preset_tools
-import mcp_servers
 Config.set_agent_llm_model("default_llm")
 
 
@@ -16,9 +15,9 @@ oxy_space = [
     ),
     preset_tools.time_tools,
     oxy.ReActAgent(
-        name="time_agent",
+        name="RAG_agent",
         desc="A tool that can query the time",
-        tools=["time_tools"],
+        tools=["RAG_server"],
     ),
     oxy.StdioMCPClient(
         name="file_reader",
@@ -27,14 +26,14 @@ oxy_space = [
             "args": ["--directory", "./mcp_servers", "run", "file_reader.py"],
         },
     ),
-    #preset_tools.command_tool,
-    #oxy.StdioMCPClient(
-    #    name="command_handler" ,
-    #    params={
-    #        "command": "python",
-    #        "args": ["-u", "./mcp_servers/command_handler.py"],
-    #    }
-    #),
+    oxy.StdioMCPClient(
+        name="RAG_server",
+        params={
+            "command": "uv",
+            "args": ["--directory", "./mcp_servers", "run", "RAG_server.py"],
+        },
+    ),
+   
     oxy.SSEMCPClient(
         name="command_handler",
         sse_url="http://127.0.0.1:8000/sse",
@@ -60,23 +59,7 @@ oxy_space = [
     ),
     oxy.ReActAgent(
         name="search_agent",
-        prompt="""
-                你是一个专业的互联网情报员。
-                你的任务是调用 'web_search' 工具获取最新、最准确的信息。
-
-                【搜索策略】
-                1. 针对时间敏感问题，关键词应包含具体年份和月份。
-                2. 必须且只能输出 JSON 格式的工具调用指令。
-                3. 不要尝试解释你的搜索过程，直接给出搜索指令。
-
-                JSON 结构：
-                {
-                    "tool_name": "web_search",
-                    "arguments": {
-                        "query": "关键词"
-                    }
-                }
-                """,
+        prompt=提示词.prompt_of_search_agent,
         desc="一个可以搜索互联网的代理。支持实时新闻、学术、技术文档查询。",
         tools=["web_search"],
     ),
@@ -84,9 +67,9 @@ oxy_space = [
         is_master=True,
         name="master_agent",
         prompt=提示词.prompt_of_master,
-        #prompt="你将熟练的使用下属代理完成用户的请求。你有三个下属代理：时间代理（time_agent），文件代理（file_agent），数学代理（math_agent）。时间代理可以查询当前时间，文件代理可以读写文件，数学代理可以进行数学计算。根据用户的请求，合理分配任务然后调用下属代理，并整合他们的回答，最终给出完整的回复。",
-        sub_agents=["time_agent", "file_agent", "search_agent"],
-        #tools=["time_tools", "file_tools", "math_tools"],
+        
+        sub_agents=["RAG_agent", "file_agent", "search_agent","command_agent"],
+        
     ),
 ]
 
@@ -94,7 +77,7 @@ oxy_space = [
 async def main():
     async with MAS(oxy_space=oxy_space) as mas:
         await mas.start_web_service(
-            first_query="What time is it now? Please save it into time.txt."
+            first_query="相关更新记得看RAEADME.md"
         )
 
 

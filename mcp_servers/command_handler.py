@@ -15,7 +15,7 @@ mcp = FastMCP("command_handler",port=8000)
           只允许utf-8编码
     """)
 
-def run(command: str, path: str = 'generate', timeout: int = 15) -> str:
+def run_command(command: str, path: str = 'generate', timeout: int = 15) -> str:
     """
     安全的命令执行，特别处理 Python 命令
     
@@ -67,8 +67,8 @@ def run(command: str, path: str = 'generate', timeout: int = 15) -> str:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             shell=True,
-            text=False,  # 使用二进制模式，避免编码问题
-            bufsize=0    # 无缓冲
+            text=False,  
+            bufsize=0    
         )
         
         # 4. 创建队列和停止标志
