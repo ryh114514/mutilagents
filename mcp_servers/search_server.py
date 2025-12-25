@@ -4,11 +4,11 @@ import sys
 
 from mcp.server.fastmcp import FastMCP
 from tavily import TavilyClient
-
+from env import TAVILY_API_KEY
 logging.basicConfig(level=logging.ERROR, stream=sys.stderr)
 logger = logging.getLogger("search_server")
 
-TAVILY_API_KEY = "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"#后期改为环境变量配置
+#后期改为环境变量配置
 tavily = TavilyClient(api_key=TAVILY_API_KEY)
 
 mcp = FastMCP("tavily-search")

@@ -7,14 +7,16 @@ import os
 from typing import Dict, Any
 import mimetypes
 from pathlib import Path
+from env import file_llm
+llm= file_llm()
 mcp = FastMCP()
 
 
-api_key = 'sk-kylinoio'#后续应隐藏
-model_name = 'gemini-2.5-pro'#
+api_key = llm.api_key
+model_name = llm.model_name
     
 # 根据重定向信息，使用HTTP并添加正确的路径
-url = f"https://dqbnczptnsvr.ap-northeast-1.clawcloudrun.com/gemini/v1beta/models/{model_name}:generateContent"
+url = llm.url
     
 headers = {
     "Content-Type": "application/json",

@@ -3,15 +3,15 @@ import os
 import 提示词
 from oxygent import MAS, Config, oxy, preset_tools
 Config.set_agent_llm_model("default_llm")
-
-
+from env import base_agent
+base_agent = base_agent()
 oxy_space = [
     oxy.HttpLLM(
         name="default_llm",
         timeout=600,
-        api_key='sk-kylinoio',
-        base_url='https://dqbnczptnsvr.ap-northeast-1.clawcloudrun.com/gemini/v1beta/',
-        model_name='gemini-3-flash-preview',
+        api_key=base_agent.api_key,
+        base_url=base_agent.url,
+        model_name=base_agent.model_name,
     ),
     preset_tools.time_tools,
     oxy.ReActAgent(
