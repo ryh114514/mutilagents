@@ -1,7 +1,8 @@
 ﻿from ragflow_sdk import RAGFlow
 from mcp.server.fastmcp import FastMCP
+from env import RAGFlow_config
 mcp= FastMCP("RAG_server")
-
+RAGFlow_config = RAGFlow_config()
 
 @mcp.tool(description="""
 使用 RAGFlow 进行查询的函数
@@ -25,12 +26,12 @@ def query_ragflow(question: str) -> str:
     # 初始化 RAGFlow 客户端
     # 这里使用示例配置，实际使用时需要替换为真实的配置信息
     client = RAGFlow(
-        api_key="ragflow-jEmKsc9iredM4tEKbPJniSyA9Zp00-BeOPlkoOjSQPU", 
-        base_url="http://localhost:12347"  
+        api_key=RAGFlow_config.api_key, 
+        base_url=RAGFlow_config.url  
     )
     
     try:
-        c=client.retrieve(question=question,dataset_ids=["5a580ddcdc1711f0a5a2ae518c57ea6f"])#数据集id，需要自行替换为真实的数据集id
+        c=client.retrieve(question=question,dataset_ids=[RAGFlow_config.dataset])#数据集id，需要自行替换为真实的数据集id
         ans=""
         num=1
         for i in c:
