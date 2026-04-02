@@ -34,4 +34,4 @@
 - 还可以重写一下前端(oxygent\web)？这个纯html看起来太low了，使用vue3可以重构一下，streamlit可能不太行
 ## 12.26日更新：
 - 配置信息整理了一下
-- 寒假想用langchain和streamlit重写一下，有人想一起吗
+
